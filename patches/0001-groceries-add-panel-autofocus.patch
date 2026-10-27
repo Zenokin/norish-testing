@@ -1,0 +1,45 @@
+diff --git a/apps/web/__tests__/components/groceries/grocery-panels.test.tsx b/apps/web/__tests__/components/groceries/grocery-panels.test.tsx
+index ddae50d2..967645e9 100644
+--- a/apps/web/__tests__/components/groceries/grocery-panels.test.tsx
++++ b/apps/web/__tests__/components/groceries/grocery-panels.test.tsx
+@@ -707,6 +707,25 @@ describe("EditGroceryPanel, the product's details", () => {
+   });
+ });
+ 
++describe("AddGroceryPanel, opening it", () => {
++  it("puts the cursor in the name field, every time it opens", () => {
++    const props = {
++      stores: STORES,
++      onCreate: () => undefined,
++      onCreateRecurring: () => undefined,
++      onOpenChange: () => undefined,
++    };
++    const { rerender } = render(<AddGroceryPanel open={true} {...props} />);
++
++    expect(screen.getByPlaceholderText("placeholder")).toHaveFocus();
++
++    rerender(<AddGroceryPanel open={false} {...props} />);
++    rerender(<AddGroceryPanel open={true} {...props} />);
++
++    expect(screen.getByPlaceholderText("placeholder")).toHaveFocus();
++  });
++});
++
+ describe("AddGroceryPanel, the order of its fields and what it refuses", () => {
+   it("puts the recurrence control under the name and before the Store, and waits on a price", () => {
+     const onCreate = vi.fn();
+diff --git a/apps/web/components/Panel/consumers/add-grocery-panel.tsx b/apps/web/components/Panel/consumers/add-grocery-panel.tsx
+index 32525ca4..ec03b946 100644
+--- a/apps/web/components/Panel/consumers/add-grocery-panel.tsx
++++ b/apps/web/components/Panel/consumers/add-grocery-panel.tsx
+@@ -121,6 +121,10 @@ export default function AddGroceryPanel({
+         <Panel.Body>
+           <div className="space-y-3">
+             <Input
++              // Opening the panel is the ask to type a grocery, not a page-load
++              // focus steal; the drawer mounts its content afresh on every open.
++              // eslint-disable-next-line jsx-a11y/no-autofocus
++              autoFocus
+               className="h-12 text-base font-medium"
+               placeholder={t("placeholder")}
+               style={{

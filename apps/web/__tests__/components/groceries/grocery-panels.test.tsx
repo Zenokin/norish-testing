@@ -707,6 +707,25 @@ describe("EditGroceryPanel, the product's details", () => {
   });
 });
 
+describe("AddGroceryPanel, opening it", () => {
+  it("puts the cursor in the name field, every time it opens", () => {
+    const props = {
+      stores: STORES,
+      onCreate: () => undefined,
+      onCreateRecurring: () => undefined,
+      onOpenChange: () => undefined,
+    };
+    const { rerender } = render(<AddGroceryPanel open={true} {...props} />);
+
+    expect(screen.getByPlaceholderText("placeholder")).toHaveFocus();
+
+    rerender(<AddGroceryPanel open={false} {...props} />);
+    rerender(<AddGroceryPanel open={true} {...props} />);
+
+    expect(screen.getByPlaceholderText("placeholder")).toHaveFocus();
+  });
+});
+
 describe("AddGroceryPanel, the order of its fields and what it refuses", () => {
   it("puts the recurrence control under the name and before the Store, and waits on a price", () => {
     const onCreate = vi.fn();

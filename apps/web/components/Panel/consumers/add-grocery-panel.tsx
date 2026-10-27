@@ -121,6 +121,10 @@ export default function AddGroceryPanel({
         <Panel.Body>
           <div className="space-y-3">
             <Input
+              // Opening the panel is the ask to type a grocery, not a page-load
+              // focus steal; the drawer mounts its content afresh on every open.
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
               className="h-12 text-base font-medium"
               placeholder={t("placeholder")}
               style={{
